@@ -51,7 +51,7 @@ python -m dues_automation.seed_sample_db --count 40
 ```
 
 This generates a fictional roster (random names, emails, phone numbers,
-pledge/active/alumni status, class year, major) into `dues_automation.db`.
+pledge/active/alumni status, class year, major) into `dues_automation.db`(main database).
 **Never point this at a real roster file** — it's random data for testing the
 pipeline before real member data is loaded.
 
