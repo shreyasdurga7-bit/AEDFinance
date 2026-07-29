@@ -1,0 +1,20 @@
+# Secrets
+.env
+dues_automation/.env
+client_secret*.json
+
+# Real member data — never committed
+dues_automation/*.db
+dues_automation/input/*.csv
+dues_automation/drafts/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# OS
+.DS_Store

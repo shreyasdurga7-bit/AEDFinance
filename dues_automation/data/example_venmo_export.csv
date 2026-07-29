@@ -1,0 +1,57 @@
+id,datetime,type,status,note,from,to,amount_total,amount_fee,funding_source,destination
+1,2026-09-01 10:15:00,Payment,Complete,dues,Jamie Test,AED Treasury,150.00,0.00,Venmo balance,Venmo balance
+2,2026-09-01 11:00:00,Payment,Complete,fall dues,Sam Example,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+3,2026-09-02 09:30:00,Payment,Complete,dues full year,Casey Sample,AED Treasury,220.00,0.00,Bank,Venmo balance
+4,2026-09-02 14:20:00,Payment,Complete,for the chapter <3,Morgan Demo,AED Treasury,25.00,0.00,Venmo balance,Venmo balance
+5,2026-09-03 08:05:00,Payment,Complete,dues,Rowan,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+6,2026-09-03 12:00:00,Payment,Complete,thanks!! 🎉,Avery Fictional,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+7,2026-09-04 10:00:00,Payment,Complete,dues part 1,Skylar Placeholder,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+8,2026-09-15 10:00:00,Payment,Complete,dues part 2,Skylar Placeholder,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+9,2026-09-05 16:45:00,Payment,Complete,,,AED Treasury,,0.00,Venmo balance,Venmo balance
+,,,,,,,,,,
+11,2026-09-06 08:04:00,Payment,Complete,<3,Kai Demo,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+12,2026-09-07 16:13:00,Payment,Complete,dues,Casey Brown,AED Treasury,220.00,0.00,Venmo balance,Venmo balance
+13,2026-09-08 11:05:00,Payment,Complete,<3,Jordan Rossi,AED Treasury,150.00,0.00,Venmo balance,Venmo balance
+14,2026-09-09 11:40:00,Payment,Complete,keep up the good work!,Remy Example,AED Treasury,129.01,0.00,Venmo balance,Venmo balance
+15,2026-09-10 14:03:00,Payment,Complete,for AED,Noel Example,AED Treasury,220.00,0.00,Venmo balance,Venmo balance
+16,2026-09-11 14:09:00,Payment,Complete,<3,Alex Okafor,AED Treasury,130.50,0.00,Venmo balance,Venmo balance
+17,2026-09-12 18:11:00,Payment,Complete,fall dues,Riley Silva,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+18,2026-09-13 13:06:00,Payment,Complete,<3,Noel Silva,AED Treasury,220.00,0.00,Venmo balance,Venmo balance
+19,2026-09-14 11:31:00,Payment,Complete,keep up the good work!,Taylor Silva,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+20,2026-09-15 13:19:00,Payment,Complete,for AED,Devon Rossi,AED Treasury,75.50,0.00,Venmo balance,Venmo balance
+21,2026-09-16 12:33:00,Payment,Complete,annual dues,Skylar Ng,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+22,2026-09-17 09:07:00,Payment,Complete,<3,Sage Chen,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+23,2026-09-18 14:02:00,Payment,Complete,keep up the good work!,Peyton Placeholder,AED Treasury,20.50,0.00,Venmo balance,Venmo balance
+24,2026-09-19 13:21:00,Payment,Complete,,Taylor Okafor,AED Treasury,220.00,0.00,Venmo balance,Venmo balance
+25,2026-09-20 20:29:00,Payment,Complete,fall dues,Blair Novak,AED Treasury,150.00,0.00,Venmo balance,Venmo balance
+26,2026-09-21 18:04:00,Payment,Complete,dues,Jordan Patel,AED Treasury,150.00,0.00,Venmo balance,Venmo balance
+27,2026-09-22 12:45:00,Payment,Complete,dues payment,Dakota Silva,AED Treasury,150.99,0.00,Venmo balance,Venmo balance
+28,2026-09-23 10:39:00,Payment,Complete,fall dues,Blair Test,AED Treasury,150.50,0.00,Venmo balance,Venmo balance
+29,2026-09-24 12:08:00,Payment,Complete,,Jesse Example,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+30,2026-09-25 15:05:00,Payment,Complete,semester dues,Emerson Nguyen,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+31,2026-09-26 10:52:00,Payment,Complete,dues payment,Shawn Nguyen,AED Treasury,150.00,0.00,Venmo balance,Venmo balance
+32,2026-09-27 11:09:00,Payment,Complete,fall dues,Micah Patel,AED Treasury,40.50,0.00,Venmo balance,Venmo balance
+33,2026-09-28 11:00:00,Payment,Complete,annual dues,Skylar Demo,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+34,2026-09-06 08:09:00,Payment,Complete,dues payment,Noel Placeholder,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+35,2026-09-07 13:08:00,Payment,Complete,,Devon Brown,AED Treasury,220.00,0.00,Venmo balance,Venmo balance
+36,2026-09-08 20:55:00,Payment,Complete,keep up the good work!,Robin Novak,AED Treasury,10.50,0.00,Venmo balance,Venmo balance
+37,2026-09-09 14:06:00,Payment,Complete,annual dues,Micah Nguyen,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+38,2026-09-10 11:28:00,Payment,Complete,semester dues,Marley Example,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+39,2026-09-11 09:00:00,Payment,Complete,dues + a little extra,Riley Kim,AED Treasury,220.00,0.00,Venmo balance,Venmo balance
+40,2026-09-12 13:39:00,Payment,Complete,dues,Quinn Okafor,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+41,2026-09-13 10:40:00,Payment,Complete,thanks!,Taylor Doe,AED Treasury,220.00,0.00,Venmo balance,Venmo balance
+42,2026-09-14 15:29:00,Payment,Complete,annual dues,Sydney Martin,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+43,2026-09-15 09:47:00,Payment,Complete,chapter dues,Charlie Garcia,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+44,2026-09-16 16:01:00,Payment,Complete,for AED,Hayden Martin,AED Treasury,129.50,0.00,Venmo balance,Venmo balance
+45,2026-09-17 16:58:00,Payment,Complete,dues,Frankie Brown,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+46,2026-09-18 19:54:00,Payment,Complete,thanks!,Frankie Garcia,AED Treasury,149.01,0.00,Venmo balance,Venmo balance
+47,2026-09-19 17:51:00,Payment,Complete,for AED,Reese Brown,AED Treasury,40.00,0.00,Venmo balance,Venmo balance
+48,2026-09-20 13:46:00,Payment,Complete,dues,Rowan Doe,AED Treasury,150.00,0.00,Venmo balance,Venmo balance
+49,2026-09-21 11:44:00,Payment,Complete,dues + a little extra,Sam Patel,AED Treasury,150.00,0.00,Venmo balance,Venmo balance
+50,2026-09-22 13:05:00,Payment,Complete,for AED,Blair Chen,AED Treasury,130.50,0.00,Venmo balance,Venmo balance
+51,2026-09-23 13:13:00,Payment,Complete,annual dues,Casey Ng,AED Treasury,150.00,0.00,Venmo balance,Venmo balance
+52,2026-09-24 18:22:00,Payment,Complete,keep up the good work!,Wren Novak,AED Treasury,130.99,0.00,Venmo balance,Venmo balance
+53,2026-09-25 15:56:00,Payment,Complete,semester dues,Jordan Fictional,AED Treasury,149.50,0.00,Venmo balance,Venmo balance
+54,2026-09-26 19:25:00,Payment,Complete,annual dues,Remy Kim,AED Treasury,130.00,0.00,Venmo balance,Venmo balance
+55,2026-09-27 08:09:00,Payment,Complete,dues + a little extra,Marley Sample,AED Treasury,20.00,0.00,Venmo balance,Venmo balance
+56,2026-09-28 10:00:00,Payment,Complete,dues refund - overpaid,Kai Fictional,AED Treasury,-20.00,0.00,Venmo balance,Venmo balance

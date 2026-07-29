@@ -1,0 +1,73 @@
+name: Daily dues reconciliation
+
+on:
+  schedule:
+    - cron: "0 13 * * *"  # 9am US Eastern (13:00 UTC), daily
+  workflow_dispatch: {}
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for input CSVs
+        id: check_input
+        run: |
+          if ls dues_automation/input/*.csv >/dev/null 2>&1; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Python
+        if: steps.check_input.outputs.found == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        if: steps.check_input.outputs.found == 'true'
+        run: pip install -r dues_automation/requirements.txt
+
+      # Trial-run persistence: the DB is gitignored (Section 6 — no PII in
+      # version control), so it's restored from an Actions cache between runs
+      # rather than committed. This is fine for a trial, but actions/cache
+      # entries can be evicted — before relying on this for real dues data,
+      # revisit with a durable store (see the "DB persistence" note in
+      # dues_automation/README.md).
+      - name: Restore database
+        if: steps.check_input.outputs.found == 'true'
+        uses: actions/cache@v4
+        with:
+          path: dues_automation/dues_automation.db
+          key: dues-db-${{ github.run_id }}
+          restore-keys: |
+            dues-db-
+
+      - name: Run reconciliation
+        if: steps.check_input.outputs.found == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SEND_MODE: ${{ vars.SEND_MODE || 'review' }}
+          GMAIL_CLIENT_ID: ${{ secrets.GMAIL_CLIENT_ID }}
+          GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_CLIENT_SECRET }}
+          GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
+          GMAIL_SENDER_EMAIL: ${{ secrets.GMAIL_SENDER_EMAIL }}
+        run: python -m dues_automation.reconcile
+
+      # Drafts/logs may contain real member names and emails, so they are
+      # uploaded as a private workflow artifact — never committed back to
+      # this public repo (Section 6: no PII in version control).
+      - name: Upload drafts and logs as artifacts
+        if: steps.check_input.outputs.found == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dues-run-${{ github.run_id }}
+          path: |
+            dues_automation/drafts/
+          retention-days: 30
+
+      - name: No input CSVs — nothing to do
+        if: steps.check_input.outputs.found == 'false'
+        run: echo "No CSV files in dues_automation/input/ — exiting cleanly."
