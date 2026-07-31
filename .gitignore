@@ -7,6 +7,7 @@ client_secret*.json
 dues_automation/*.db
 dues_automation/input/*.csv
 dues_automation/drafts/
+dues_automation/reports/
 
 # Python
 __pycache__/

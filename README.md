@@ -25,6 +25,7 @@ dues_automation/
   rates.py                # configurable dues rates (dues_rates table) + CLI
   reconcile.py            # ingestion + reconciliation orchestration (Section 5.5)
   history.py               # per-member and chapter-wide multi-semester history
+  visualize.py              # simple PDF bar chart of revenue by semester
   gmail_client.py          # send-only Gmail API wrapper
   get_gmail_token.py       # one-time local script to mint a Gmail refresh token
   send_emails.py            # donation/confirmation/reminder emails (Section 5.6)
@@ -92,6 +93,18 @@ python -m dues_automation.history summary                  # totals by semester,
 
 `member` accepts either an exact `ut_id` or a name (fuzzy-matched the same
 way ingestion matches transactions).
+
+### Visualize revenue
+
+```bash
+python -m dues_automation.visualize
+```
+
+Reads whatever's in the database (e.g. after a trial run against the example
+fixtures) and writes a simple one-page PDF bar chart of dues vs. donations
+collected per semester to `dues_automation/reports/revenue_summary.pdf`
+(gitignored — regenerate it whenever you want a fresh snapshot). Pass
+`-o path/to/file.pdf` to write elsewhere.
 
 ### Run tests
 
