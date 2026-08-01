@@ -1,7 +1,7 @@
-"""Section 5.3 — Claude parsing layer.
+"""Section 5.3 — Gemini parsing layer.
 
 Turns one raw transaction row (arbitrary Venmo/Zelle CSV text) into structured
-fields via the Claude API. Never guesses: Claude is instructed to return null
+fields via the Gemini API. Never guesses: Gemini is instructed to return null
 for anything it can't confidently extract, and every attempt (success or
 failure) is logged to parse_log for audit purposes. A single bad row must
 never halt the batch.
@@ -11,7 +11,8 @@ import sqlite3
 import time
 from dataclasses import dataclass
 
-from anthropic import Anthropic
+from google import genai
+from google.genai import types as genai_types
 
 from dues_automation import config
 
@@ -48,16 +49,17 @@ def extract_json(text: str) -> dict:
     return json.loads(text.strip())
 
 
-def parse_transaction_row(raw_text: str, client: Anthropic) -> ParseResult:
+def parse_transaction_row(raw_text: str, client: genai.Client) -> ParseResult:
     try:
-        response = client.messages.create(
-            model=config.ANTHROPIC_MODEL,
-            max_tokens=300,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": raw_text}],
+        response = client.models.generate_content(
+            model=config.GEMINI_MODEL,
+            contents=raw_text,
+            config=genai_types.GenerateContentConfig(
+                system_instruction=SYSTEM_PROMPT,
+                max_output_tokens=300,
+            ),
         )
-        raw_reply = response.content[0].text
-        parsed = extract_json(raw_reply)
+        parsed = extract_json(response.text)
         required_keys = {"name", "amount", "date", "note"}
         if not required_keys.issubset(parsed.keys()):
             return ParseResult(status="failed", parsed=None, error=f"missing keys in {parsed!r}")
@@ -80,15 +82,16 @@ def _log_parse(conn: sqlite3.Connection, raw_text: str, result: ParseResult) -> 
 def parse_batch(
     raw_rows: list[str],
     conn: sqlite3.Connection,
-    client: Anthropic | None = None,
+    client: genai.Client | None = None,
     delay_seconds: float = 0.2,
 ) -> list[ParseResult]:
-    """Parse each raw row via Claude, logging every attempt to parse_log.
+    """Parse each raw row via Gemini, logging every attempt to parse_log.
 
-    Relies on the anthropic SDK's built-in retry/backoff for transient errors;
-    any row that still fails is logged and skipped rather than halting the run.
+    Relies on the google-genai SDK's built-in retry/backoff for transient
+    errors; any row that still fails is logged and skipped rather than
+    halting the run.
     """
-    client = client or Anthropic(api_key=config.ANTHROPIC_API_KEY)
+    client = client or genai.Client(api_key=config.GEMINI_API_KEY)
     results = []
     for raw_text in raw_rows:
         result = parse_transaction_row(raw_text, client)

@@ -1,6 +1,6 @@
 """Section 5.6 — donation thank-yous, dues confirmations, and dues reminders.
 
-Every email is drafted by Claude, then gated by SEND_MODE:
+Every email is drafted by Gemini, then gated by SEND_MODE:
   - "review" (default): written to a local draft file + logged, nothing sent.
   - "live": sent via Gmail (send-only OAuth scope), then logged.
 A blank member email always falls back to a local draft, even in live mode —
@@ -9,7 +9,8 @@ this must never fail silently and must never invent a recipient.
 import sqlite3
 from datetime import datetime, timedelta
 
-from anthropic import Anthropic
+from google import genai
+from google.genai import types as genai_types
 
 from dues_automation import config, gmail_client
 from dues_automation.parse import extract_json
@@ -20,23 +21,25 @@ Epsilon Delta (AED), a college organization. Return ONLY valid JSON with exactly
 warm and professional, and sign off as "AED Treasurer Committee"."""
 
 
-def _draft(client: Anthropic | None, user_prompt: str, fallback: tuple[str, str]) -> tuple[str, str]:
+def _draft(client: genai.Client | None, user_prompt: str, fallback: tuple[str, str]) -> tuple[str, str]:
     if client is None:
         return fallback
     try:
-        response = client.messages.create(
-            model=config.ANTHROPIC_MODEL,
-            max_tokens=400,
-            system=DRAFT_SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_prompt}],
+        response = client.models.generate_content(
+            model=config.GEMINI_MODEL,
+            contents=user_prompt,
+            config=genai_types.GenerateContentConfig(
+                system_instruction=DRAFT_SYSTEM_PROMPT,
+                max_output_tokens=400,
+            ),
         )
-        parsed = extract_json(response.content[0].text)
+        parsed = extract_json(response.text)
         return parsed["subject"], parsed["body"]
     except Exception:  # noqa: BLE001 — a bad draft must never halt the batch
         return fallback
 
 
-def draft_donation_thanks(client: Anthropic | None, member: dict, amount: float) -> tuple[str, str]:
+def draft_donation_thanks(client: genai.Client | None, member: dict, amount: float) -> tuple[str, str]:
     fallback = (
         "Thank you for your donation to AED",
         f"Hi {member['full_name']},\n\nThank you for your generous donation of ${amount:,.2f} to AED. "
@@ -49,7 +52,7 @@ def draft_donation_thanks(client: Anthropic | None, member: dict, amount: float)
     return _draft(client, prompt, fallback)
 
 
-def draft_dues_confirmation(client: Anthropic | None, member: dict, amount: float, covers_full_year: bool) -> tuple[str, str]:
+def draft_dues_confirmation(client: genai.Client | None, member: dict, amount: float, covers_full_year: bool) -> tuple[str, str]:
     period = "the full academic year" if covers_full_year else f"the {config.CURRENT_SEMESTER} semester"
     fallback = (
         "AED dues received — you're all set",
@@ -63,7 +66,7 @@ def draft_dues_confirmation(client: Anthropic | None, member: dict, amount: floa
     return _draft(client, prompt, fallback)
 
 
-def draft_dues_reminder(client: Anthropic | None, member: dict, amount_owed: float, semester: str) -> tuple[str, str]:
+def draft_dues_reminder(client: genai.Client | None, member: dict, amount_owed: float, semester: str) -> tuple[str, str]:
     fallback = (
         "Friendly reminder: AED dues outstanding",
         f"Hi {member['full_name']},\n\nOur records show you still owe ${amount_owed:,.2f} in AED dues "
@@ -104,17 +107,17 @@ def _write_draft(member: dict, email_type: str, subject: str, body: str, missing
     path.write_text(f"To: {to_line}\nSubject: {subject}\n\n{body}\n")
 
 
-def handle_donation(conn: sqlite3.Connection, member: dict, amount: float, client: Anthropic | None = None) -> None:
+def handle_donation(conn: sqlite3.Connection, member: dict, amount: float, client: genai.Client | None = None) -> None:
     subject, body = draft_donation_thanks(client, member, amount)
     deliver_email(conn, member, "donation_thanks", subject, body)
 
 
-def handle_dues_confirmation(conn: sqlite3.Connection, member: dict, amount: float, covers_full_year: bool, client: Anthropic | None = None) -> None:
+def handle_dues_confirmation(conn: sqlite3.Connection, member: dict, amount: float, covers_full_year: bool, client: genai.Client | None = None) -> None:
     subject, body = draft_dues_confirmation(client, member, amount, covers_full_year)
     deliver_email(conn, member, "dues_confirmation", subject, body)
 
 
-def send_reminders(conn: sqlite3.Connection, client: Anthropic | None = None) -> int:
+def send_reminders(conn: sqlite3.Connection, client: genai.Client | None = None) -> int:
     """Batch pass after reconciliation: remind everyone still owing dues,
     respecting REMINDER_COOLDOWN_DAYS so the daily job doesn't re-email daily."""
     cutoff = (datetime.utcnow() - timedelta(days=config.REMINDER_COOLDOWN_DAYS)).isoformat()

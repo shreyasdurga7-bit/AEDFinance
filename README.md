@@ -1,8 +1,8 @@
 # AED Dues Automation
 
 Automates reconciling AED member dues against Venmo/Zelle transaction exports:
-Claude parses raw transaction rows, fuzzy-matching links them to members,
-explicit business-rule logic (never Claude guessing) classifies each payment
+Gemini parses raw transaction rows, fuzzy-matching links them to members,
+explicit business-rule logic (never Gemini guessing) classifies each payment
 as dues or a donation, and the pipeline drafts (or, once configured, sends)
 donation thank-yous, dues confirmations, and dues reminders.
 
@@ -19,7 +19,7 @@ dues_automation/
   config.py            # env-driven settings
   db.py                 # connection + init helper
   seed_sample_db.py     # generates a synthetic member roster for dev/trial use
-  parse.py               # Claude parsing layer (Section 5.3)
+  parse.py               # Gemini parsing layer (Section 5.3)
   match.py               # fuzzy member matching (Section 5.4)
   classify.py            # dues/donation business rules (Section 4.5)
   rates.py                # configurable dues rates (dues_rates table) + CLI
@@ -42,7 +42,7 @@ cd dues_automation
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env   # then fill in ANTHROPIC_API_KEY etc.
+cp .env.example .env   # then fill in GEMINI_API_KEY etc.
 ```
 
 ### Seed the synthetic trial database
@@ -117,7 +117,7 @@ pytest dues_automation/tests/
 
 | Variable | Where | Notes |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | `.env` locally, GitHub secret in Actions | Never hardcode, never log |
+| `GEMINI_API_KEY` | `.env` locally, GitHub secret in Actions | Never hardcode, never log |
 | `GMAIL_CLIENT_ID` / `GMAIL_CLIENT_SECRET` / `GMAIL_REFRESH_TOKEN` / `GMAIL_SENDER_EMAIL` | same | Send-only scope (`gmail.send`) — see below |
 | `SEND_MODE` | `.env` / GitHub Actions repo variable | `review` (default, safe) or `live` |
 
@@ -156,7 +156,7 @@ volume.
 ## Known limitations (trial-run scope)
 
 - **Real CSV column names are still unconfirmed.** `reconcile.py` handles
-  arbitrary columns by serializing whatever's present into text for Claude
+  arbitrary columns by serializing whatever's present into text for Gemini
   to interpret, so it should tolerate real exports, but the fixtures in
   `data/` are a best-effort approximation until a real export is available.
 - **GitHub Actions persistence is not production-grade yet.** The workflow

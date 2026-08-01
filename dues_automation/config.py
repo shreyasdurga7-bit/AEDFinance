@@ -10,8 +10,8 @@ load_dotenv(BASE_DIR / ".env")
 DB_PATH = os.environ.get("DUES_DB_PATH", str(BASE_DIR / "dues_automation.db"))
 INPUT_DIR = Path(os.environ.get("DUES_INPUT_DIR", str(BASE_DIR / "input")))
 
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
-ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 
 # Section 5.4 — matches below this score are flagged for manual review, never auto-committed.
 FUZZY_MATCH_THRESHOLD = int(os.environ.get("DUES_FUZZY_THRESHOLD", "85"))

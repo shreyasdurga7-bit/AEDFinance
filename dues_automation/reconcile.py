@@ -1,7 +1,7 @@
 """Section 5.5 — ingestion, matching, classification, and reconciliation.
 
 Pipeline per CSV file: read rows (skip malformed ones) -> serialize each row to
-raw text -> Claude-parse -> fuzzy-match to a member -> classify dues/donation
+raw text -> Gemini-parse -> fuzzy-match to a member -> classify dues/donation
 -> write payments -> update dues_status -> print a summary report.
 """
 import argparse
@@ -12,7 +12,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import pandas as pd
-from anthropic import Anthropic
+from google import genai
 
 from dues_automation import classify, config, db, match, parse, rates, send_emails
 
@@ -32,7 +32,7 @@ def sibling_semester(semester: str) -> str | None:
 
 def row_to_raw_text(row: pd.Series) -> str:
     """Serialize a CSV row into 'column: value' text, regardless of the
-    source platform's actual column names — this is what gets sent to Claude."""
+    source platform's actual column names — this is what gets sent to Gemini."""
     parts = [f"{col}: {val}" for col, val in row.items() if pd.notna(val) and str(val).strip() != ""]
     return "; ".join(parts)
 
@@ -142,7 +142,7 @@ def apply_dues_payment(
     return new_owed == 0
 
 
-def process_csv(csv_path: Path, conn: sqlite3.Connection, client: Anthropic | None = None) -> IngestSummary:
+def process_csv(csv_path: Path, conn: sqlite3.Connection, client: genai.Client | None = None) -> IngestSummary:
     summary = IngestSummary()
     rows, skipped_malformed = load_csv_rows(csv_path, conn)
     summary.rows_seen = len(rows)
@@ -321,7 +321,7 @@ def print_report(conn: sqlite3.Connection, summary: IngestSummary) -> None:
 def run(csv_paths: list[Path]) -> None:
     db.init_db()
     with db.get_connection() as conn:
-        client = Anthropic(api_key=config.ANTHROPIC_API_KEY) if config.ANTHROPIC_API_KEY else None
+        client = genai.Client(api_key=config.GEMINI_API_KEY) if config.GEMINI_API_KEY else None
         combined = IngestSummary()
         for csv_path in csv_paths:
             s = process_csv(csv_path, conn, client=client)
