@@ -11,7 +11,7 @@ DB_PATH = os.environ.get("DUES_DB_PATH", str(BASE_DIR / "dues_automation.db"))
 INPUT_DIR = Path(os.environ.get("DUES_INPUT_DIR", str(BASE_DIR / "input")))
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-flash-lite-latest")
 
 # Section 5.4 — matches below this score are flagged for manual review, never auto-committed.
 FUZZY_MATCH_THRESHOLD = int(os.environ.get("DUES_FUZZY_THRESHOLD", "85"))
